@@ -11,3 +11,8 @@ In the project directory, you can run:
 Create public/images directory.\
 Create env file and set your database configs.
 
+## Run the project
+
+### `npm i`
+### `npm run dev`
+
