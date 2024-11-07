@@ -8,7 +8,6 @@ In the project directory, you can run:
 
 ## Things to do
 
-### `npm i`
 Create public/images directory.
-### `npm run dev`
+Create env file and set your database configs.
 
