@@ -8,6 +8,6 @@ In the project directory, you can run:
 
 ## Things to do
 
-Create public/images directory.
+Create public/images directory.\
 Create env file and set your database configs.
 
