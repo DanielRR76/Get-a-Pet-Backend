@@ -9,6 +9,6 @@ In the project directory, you can run:
 ## Things to do
 
 ### `npm i`
-Create public/images directory.\
+Create public/images directory.
 ### `npm run dev`
 
