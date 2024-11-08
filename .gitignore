@@ -11,10 +11,6 @@
 # production
 /build
 
-# photos
-/public/images/pets/
-/public/images/users/
-
 # misc
 .DS_Store
 .env.local
