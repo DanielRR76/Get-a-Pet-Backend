@@ -8,7 +8,7 @@ const connection = new Sequelize(
   process.env.PASSWORD,
   {
     host: process.env.HOST,
-    dialect: "mysql",
+    dialect: "postgres",
   }
 );
 
