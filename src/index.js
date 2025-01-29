@@ -2,30 +2,35 @@ import express from "express";
 import cors from "cors";
 import UserRoutes from "./routes/UserRoutes.mjs";
 import PetRoutes from "./routes/PetRoutes.mjs";
-import connection from "./db/postgres.mjs";
+import { PrismaClient } from "@prisma/client"; // Importando o Prisma Client
 
 const app = express();
 
-//config JSON response
+// Inicializando o Prisma Client
+const prisma = new PrismaClient();
+
+// Config JSON response
 app.use(express.json());
 
-//config URL encoded
+// Config URL encoded
 app.use(express.urlencoded({ extended: true }));
 
-//solve CORS
+// Solução para CORS
 app.use(cors({ credentials: true, origin: "http://localhost:3001" }));
 
-//Public folder for images
+// Pasta pública para imagens
 app.use(express.static("public"));
 
-//Routes
+// Rotas
 app.use("/users", UserRoutes);
 app.use("/pets", PetRoutes);
 
-//Database connection
-connection
-  .sync()
+// Conectar ao banco de dados com Prisma
+prisma
+  .$connect()
   .then(() => {
     app.listen(5000, () => console.log("Backend is running on port 5000!"));
   })
-  .catch((error) => console.error(error));
+  .catch((error) => {
+    console.error("Erro ao conectar ao banco de dados com Prisma:", error);
+  });

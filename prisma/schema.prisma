@@ -1,0 +1,35 @@
+// Defina o provedor do banco de dados (PostgreSQL) no Prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique
+  password  String
+  image     String?
+  phone     String
+  pets      Pet[]   @relation("UserOwner")
+  adopted   Pet[]   @relation("UserAdopter")
+}
+
+model Pet {
+  id         Int     @id @default(autoincrement())
+  name       String
+  age        Int
+  weight     Float
+  color      String
+  images     Json
+  available  Boolean
+  ownerId    Int
+  adopterId  Int?
+
+  owner      User    @relation("UserOwner", fields: [ownerId], references: [id])
+  adopter    User?   @relation("UserAdopter", fields: [adopterId], references: [id])
+}
