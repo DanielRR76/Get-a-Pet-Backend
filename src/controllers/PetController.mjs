@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import getToken from "../helpers/get-token.mjs";
 import getUserByToken from "../helpers/get-user-by-token.mjs";
 import colorpets from "../helpers/verify-color-pet.mjs";
+import { deleteImage } from "../helpers/image-delete.mjs";
 
 const prisma = new PrismaClient();
 
@@ -11,29 +12,34 @@ export default class PetController {
     const { name, age, weight } = req.body;
     let color = req.body.color;
     const available = true;
-    const images = req.files;
+    const images = req.files.map((file) => file.path);
 
     if (!name) {
+      await deleteImage(images);
       res.status(422).json({ message: "O nome é obrigatorio" });
       return;
     }
 
     if (!age) {
+      await deleteImage(images);
       res.status(422).json({ message: "A idade é obrigatoria" });
       return;
     }
 
     if (!weight) {
+      await deleteImage(images);
       res.status(422).json({ message: "O peso é obrigatorio" });
       return;
     }
 
     if (!color) {
+      await deleteImage(images);
       res.status(422).json({ message: "A cor é obrigatoria" });
       return;
     }
 
     if (!colorpets.includes(color.toUpperCase())) {
+      await deleteImage(images);
       res
         .status(422)
         .json({ message: `as cores permitidas são: ${colorpets}.` });
@@ -41,6 +47,7 @@ export default class PetController {
     }
 
     if (!images || images.length === 0) {
+      await deleteImage(images);
       res.status(422).json({ message: "A imagem é obrigatoria" });
       return;
     }
@@ -52,6 +59,7 @@ export default class PetController {
     });
 
     if (oldPet) {
+      await deleteImage(images);
       res.status(422).json({ message: "O pet já existe" });
       return;
     }
@@ -67,7 +75,7 @@ export default class PetController {
     };
 
     images.forEach((image) => {
-      pet.images.push(image.filename);
+      pet.images.push(image);
     });
 
     try {
@@ -170,36 +178,50 @@ export default class PetController {
     const pet = await prisma.pet.findUnique({ where: { id: parseInt(id) } });
 
     if (!pet) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(404).json({ message: "O pet não foi encontrado" });
       return;
     }
 
     if (pet.ownerId !== user.id) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "O pet não pertence ao usuário" });
       return;
     }
 
     if (!name) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "O nome é obrigatorio" });
       return;
     }
 
     if (!age) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "A idade é obrigatoria" });
       return;
     }
 
     if (!weight) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "O peso é obrigatorio" });
       return;
     }
 
     if (!color) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "A cor é obrigatoria" });
       return;
     }
 
     if (!colorpets.includes(color.toUpperCase())) {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res
         .status(422)
         .json({ message: `as cores permitidas são: ${colorpets}.` });
@@ -214,14 +236,16 @@ export default class PetController {
     };
 
     if (images === "") {
+      images = req.files.map((file) => file.path);
+      await deleteImage(images);
       res.status(422).json({ message: "A imagem é obrigatoria" });
       return;
     } else if (images !== "" && images === undefined) {
-      images = req.files;
+      images = req.files.map((file) => file.path);
       updatedData.images = [];
 
       images.forEach((image) => {
-        updatedData.images.push(image.filename);
+        updatedData.images.push(image);
       });
       if (updatedData.images.length === 0) {
         updatedData.images = pet.images;
