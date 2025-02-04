@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Solução para CORS
-app.use(cors({ credentials: true, origin: "https://danielrr76.github.io/Adote-um-Pet-Frontend" }));
+app.use(cors({ credentials: true, origin: "https://danielrr76.github.io" }));
 
 // Pasta pública para imagens
 app.use(express.static("public"));
