@@ -4,6 +4,9 @@ import createUserToken from "../helpers/create-user-token.mjs";
 import getToken from "../helpers/get-token.mjs";
 import getUserByToken from "../helpers/get-user-by-token.mjs";
 import jwt from "jsonwebtoken";
+import { deleteImage } from "../helpers/image-delete.mjs";
+import dotenv from "dotenv";
+dotenv.config();
 
 const prisma = new PrismaClient(); // Instancia do Prisma Client
 
@@ -99,7 +102,7 @@ export default class UserController {
     let currentUser;
     if (req.headers.authorization) {
       const token = getToken(req);
-      const decoded = jwt.verify(token, "nossosecret");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       currentUser = await prisma.user.findUnique({
         where: { id: decoded.id },
         select: { id: true, name: true, email: true, phone: true, image: true },
@@ -132,16 +135,24 @@ export default class UserController {
     const { name, email, phone, password, confirmPassword } = req.body;
     let image = "";
 
+    if (user.id !== parseInt(id)) {
+      await deleteImage(image);
+      res.status(422).json({ message: "O id nao corresponde ao usuario" });
+      return;
+    }
+
     if (req.file) {
-      image = req.file.filename;
+      image = req.file.path;
     }
 
     if (!name) {
+      await deleteImage(image);
       res.status(422).json({ message: "O nome é obrigatorio" });
       return;
     }
 
     if (!email) {
+      await deleteImage(image);
       res.status(422).json({ message: "O email é obrigatorio" });
       return;
     }
@@ -150,6 +161,7 @@ export default class UserController {
       where: { email: email },
     });
     if (user.email !== email && userExists) {
+      await deleteImage(image);
       res
         .status(422)
         .json({ message: "O email ja existe. Por favor, utilize outro email" });
@@ -157,11 +169,13 @@ export default class UserController {
     }
 
     if (!phone) {
+      await deleteImage(image);
       res.status(422).json({ message: "O numero de celular é obrigatorio" });
       return;
     }
 
     if (password !== confirmPassword) {
+      await deleteImage(image);
       res
         .status(422)
         .json({ message: "A senha e a confirmação precisam ser iguais" });

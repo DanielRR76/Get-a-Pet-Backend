@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
-const connection = new Sequelize(process.env.DATABASE_URL, {
+const connection = new Sequelize(process.env.local.DATABASE_URL, {
   dialect: "postgres",
   dialectOptions: {
     ssl: {
