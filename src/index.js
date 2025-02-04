@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Solução para CORS
-app.use(cors({ credentials: true, origin: "http://localhost:3001" }));
+app.use(cors({ credentials: true, origin: "https://danielrr76.github.io/Adote-um-Pet-Frontend" }));
 
 // Pasta pública para imagens
 app.use(express.static("public"));
