@@ -1,0 +1,46 @@
+{
+    "$schema": "https://www.schemastore.org/tsconfig",
+    "_version": "24.0.0",
+
+    "compilerOptions": {
+        "lib": ["es2023", "ESNext.Array", "ESNext.Collection", "ESNext.Error", "ESNext.Iterator", "ESNext.Promise"],
+        "module": "esnext",
+        "target": "es2023",
+        "ignoreDeprecations": "5.0",
+
+        "strict": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "baseUrl": ".",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./",
+        "typeRoots": ["./src/@types", "./node_modules/@types"],
+        "forceConsistentCasingInFileNames": true,
+
+        "paths": {
+            "@constants/*": ["./src/constants/*"],
+            "@contracts/*": ["./src/contracts/*"],
+            "@controllers/*": ["./src/controllers/*"],
+            "@db/*": ["./src/db/*"],
+            "@domain/*": ["./src/domain/*"],
+            "@dtos/*": ["./src/dtos/*"],
+            "@enums/*": ["./src/enums/*"],
+            "@errors/*": ["./src/errors/*"],
+            "@helpers/*": ["./src/helpers/*"],
+            "@libs/*": ["./src/libs/*"],
+            "@middlewares/*": ["./src/middlewares/*"],
+            "@models/*": ["./src/models/*"],
+            "@repositories/*": ["./src/repositories/*"],
+            "@routes/*": ["./src/routes/*"],
+            "@server/*": ["./src/server/*"],
+            "@services/*": ["./src/services/*"],
+            "@customTypes/*": ["./src/types/*"]
+        }
+    },
+    "exclude": ["node_modules", "generated"]
+}
